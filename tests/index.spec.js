@@ -5,7 +5,7 @@ describe("Example.com", () => {
   
   beforeAll(async function() {
     driver = await new Builder().forBrowser('chrome').build();
-    await driver.get('C:\\Users\\Mykhailo.bilyk\\Documents\\learningJS\\index.html');
+    await driver.get('https://Froom32.github.io');
   });
 
   afterAll(async function() {
@@ -17,8 +17,8 @@ describe("Example.com", () => {
     await click(driver, 'btn-new-game');
   });
 
-  async function click(driver, id) {
-    await driver.findElement(By.id(id)).click();
+  function click(driver, id) {
+    return driver.findElement(By.id(id)).click();
   };
 
   function findByID(driver, id) {
@@ -81,14 +81,8 @@ describe("Example.com", () => {
     await expect(await modalWindow.getText()).toEqual("Nobody Won!");
   });
 
-  it("Players could not make one step twice in one box", async () => {
-    let err;
-    await click(driver, '00');
-    try{
-      await click(driver, '00');
-    } catch (e) {
-      err = e.message;
-    };
-    expect(err).toEqual("Err");
-  });
+  //it("Players could not make one step twice in one box", async () => {
+   // await click(driver, '00');
+    //await expect(await click(driver, '00')).toEqual('');
+  //});
 });
