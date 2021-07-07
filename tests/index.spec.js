@@ -1,88 +1,80 @@
-const {Builder, By, Key, until} = require('selenium-webdriver');
+const {Main} = require('../lib/main');
 
 describe("Example.com", () => {
-  let driver;
+  const browser = new Main();
   
   beforeAll(async function() {
-    driver = await new Builder().forBrowser('chrome').build();
-    await driver.get('https://Froom32.github.io');
+    await browser.get('https://Froom32.github.io');
   });
 
   afterAll(async function() {
-    await driver.quit();
+    await browser.close();
   });
 
   beforeEach(async function() {
-    await click(driver, 'board_3');
-    await click(driver, 'btn-new-game');
+    await browser.selectBoardSize('board_3');
   });
 
-  function click(driver, id) {
-    return driver.findElement(By.id(id)).click();
-  };
-
-  function findByID(driver, id) {
-    return driver.findElement(By.id(id));
-  };
-
   it("X player should win by vertical line", async () => {
-    await click(driver, '00');
-    await click(driver, '01');
-    await click(driver, '10');
-    await click(driver, '02');
-    await click(driver, '20');
-    let modalWindow = await findByID(driver, 'content');
+    await browser.clickByID('00');
+    await browser.clickByID('01');
+    await browser.clickByID('10');
+    await browser.clickByID('02');
+    await browser.clickByID('20');
+    let modalWindow = await browser.findByID('content');
     await expect(await modalWindow.getText()).toEqual("X Won!");
   });
 
   it("0 player should win by horizontal line", async () => {
-    await click(driver, '10');
-    await click(driver, '00');
-    await click(driver, '11');
-    await click(driver, '01');
-    await click(driver, '20');
-    await click(driver, '02');
-    let modalWindow = await findByID(driver, 'content');
+    await browser.clickByID('10');
+    await browser.clickByID('00');
+    await browser.clickByID('11');
+    await browser.clickByID('01');
+    await browser.clickByID('20');
+    await browser.clickByID('02');
+    let modalWindow = await browser.findByID('content');
     await expect(await modalWindow.getText()).toEqual("0 Won!");
   });
 
   it("X player should win by diagonal line", async () => {
-    await click(driver, '00');
-    await click(driver, '01');
-    await click(driver, '11');
-    await click(driver, '02');
-    await click(driver, '22');
-    let modalWindow = await findByID(driver, 'content');
+    await browser.clickByID('00');
+    await browser.clickByID('01');
+    await browser.clickByID('11');
+    await browser.clickByID('02');
+    await browser.clickByID('22');
+    let modalWindow = await browser.findByID('content');
     await expect(await modalWindow.getText()).toEqual("X Won!");
   });
 
   it("0 player should win by opposite diagonal line", async () => {
-    await click(driver, '00');
-    await click(driver, '02');
-    await click(driver, '10');
-    await click(driver, '11');
-    await click(driver, '22');
-    await click(driver, '20');
-    let modalWindow = await findByID(driver, 'content');
+    await browser.clickByID('00');
+    await browser.clickByID('02');
+    await browser.clickByID('10');
+    await browser.clickByID('11');
+    await browser.clickByID('22');
+    await browser.clickByID('20');
+    let modalWindow = await browser.findByID('content');
     await expect(await modalWindow.getText()).toEqual("0 Won!");
   });
 
   it("There should be a draw", async () => {
-    await click(driver, '00');
-    await click(driver, '01');
-    await click(driver, '02');
-    await click(driver, '11');
-    await click(driver, '10');
-    await click(driver, '12');
-    await click(driver, '21');
-    await click(driver, '20');
-    await click(driver, '22');
-    let modalWindow = await findByID(driver, 'content');
+    await browser.clickByID('00');
+    await browser.clickByID('01');
+    await browser.clickByID('02');
+    await browser.clickByID('11');
+    await browser.clickByID('10');
+    await browser.clickByID('12');
+    await browser.clickByID('21');
+    await browser.clickByID('20');
+    await browser.clickByID('22');
+    let modalWindow = await browser.findByID('content');
     await expect(await modalWindow.getText()).toEqual("Nobody Won!");
   });
 
-  //it("Players could not make one step twice in one box", async () => {
-   // await click(driver, '00');
-    //await expect(await click(driver, '00')).toEqual('');
-  //});
+  it("Players could not make one step twice in one box", async () => {
+    await browser.clickByID('00');
+    await browser.clickByID('00');
+    let box = await browser.findByID('00');
+    await expect(await box.getText()).toEqual('X');
+  });
 });
